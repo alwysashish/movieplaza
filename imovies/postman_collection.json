@@ -1,0 +1,276 @@
+{
+  "info": {
+    "_postman_id": "imovies-api-v1",
+    "name": "IMovies Platform API",
+    "description": "Production-grade API collection for IMovies online movie ticket booking platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane.doe@example.com\",\n  \"password\": \"Secret@123\",\n  \"phone\": \"+1 555-0188\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@imovies.com\",\n  \"password\": \"User@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@imovies.com\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Updated\",\n  \"phone\": \"+1 555-9999\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/profile", "host": ["{{baseUrl}}"], "path": ["auth", "profile"] }
+          }
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"User@123\",\n  \"newPassword\": \"NewPassword@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/password", "host": ["{{baseUrl}}"], "path": ["auth", "password"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "List Movies (with query filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/movies?search=&genre=Sci-Fi&language=English&sort=rating_desc&page=1&limit=12",
+              "host": ["{{baseUrl}}"],
+              "path": ["movies"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "genre", "value": "Sci-Fi" },
+                { "key": "language", "value": "English" },
+                { "key": "sort", "value": "rating_desc" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "12" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Movie By ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/movies/:id", "host": ["{{baseUrl}}"], "path": ["movies", ":id"] }
+          }
+        },
+        {
+          "name": "Create Movie (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Gladiator II\",\n  \"description\": \"Years after witnessing the death of Maximus at the hands of his uncle, Lucius must enter the Colosseum.\",\n  \"genre\": [\"Action\", \"Adventure\", \"Drama\"],\n  \"language\": \"English\",\n  \"duration\": 148,\n  \"rating\": 8.2,\n  \"posterUrl\": \"https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80\",\n  \"backdropUrl\": \"https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1600&q=80\",\n  \"trailerUrl\": \"https://www.youtube.com/watch?v=4rgYUipGJNo\",\n  \"cast\": [{\"name\": \"Paul Mescal\", \"role\": \"Lucius\"}, {\"name\": \"Pedro Pascal\", \"role\": \"Marcus Acacius\"}],\n  \"director\": \"Ridley Scott\",\n  \"releaseDate\": \"2024-11-22\",\n  \"certificate\": \"A\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/movies", "host": ["{{baseUrl}}"], "path": ["movies"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Theaters",
+      "item": [
+        {
+          "name": "Get All Theaters",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/theaters", "host": ["{{baseUrl}}"], "path": ["theaters"] }
+          }
+        },
+        {
+          "name": "Create Theater (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"AMC Empire 25 IMAX\",\n  \"city\": \"New York\",\n  \"address\": \"234 W 42nd St, Times Square, NY 10036\",\n  \"screens\": [\n    {\"name\": \"Screen 1 IMAX\", \"rows\": 10, \"seatsPerRow\": 12},\n    {\"name\": \"Screen 2 Dolby\", \"rows\": 10, \"seatsPerRow\": 12}\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/theaters", "host": ["{{baseUrl}}"], "path": ["theaters"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Showtimes & Seats",
+      "item": [
+        {
+          "name": "Get Showtimes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/showtimes?movieId=&date=2026-10-30&city=New York",
+              "host": ["{{baseUrl}}"],
+              "path": ["showtimes"]
+            }
+          }
+        },
+        {
+          "name": "Get Showtime Seat Map",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/showtimes/:id/seats", "host": ["{{baseUrl}}"], "path": ["showtimes", ":id", "seats"] }
+          }
+        },
+        {
+          "name": "Lock Seats (5-Minute Hold)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"seats\": [\"D5\", \"D6\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/showtimes/:id/lock", "host": ["{{baseUrl}}"], "path": ["showtimes", ":id", "lock"] }
+          }
+        },
+        {
+          "name": "Unlock Seats",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"seats\": [\"D5\", \"D6\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/showtimes/:id/unlock", "host": ["{{baseUrl}}"], "path": ["showtimes", ":id", "unlock"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Atomic Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"showtimeId\": \"<INSERT_SHOWTIME_ID>\",\n  \"seats\": [\"D5\", \"D6\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/bookings", "host": ["{{baseUrl}}"], "path": ["bookings"] }
+          }
+        },
+        {
+          "name": "Get My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/bookings/my", "host": ["{{baseUrl}}"], "path": ["bookings", "my"] }
+          }
+        },
+        {
+          "name": "Cancel Booking (2h rule)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/bookings/:id", "host": ["{{baseUrl}}"], "path": ["bookings", ":id"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get Box Office Analytics",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/admin/stats", "host": ["{{baseUrl}}"], "path": ["admin", "stats"] }
+          }
+        }
+      ]
+    }
+  ]
+}
